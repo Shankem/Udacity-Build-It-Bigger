@@ -10,7 +10,6 @@ import android.view.View;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.growingcoder.jokesdisplaylib.JokeActivity;
-import com.joker.Joker;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -61,9 +60,17 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void tellJoke() {
-        Intent intent = new Intent(this, JokeActivity.class);
-        intent.putExtra(JokeActivity.JOKE_INTENT_KEY, Joker.makeMeLaugh());
-        startActivity(intent);
+        new JokeRetrieverTask(new JokeRetrievalHandler()).execute();
+    }
+
+    private class JokeRetrievalHandler implements JokeRetrieverTask.OnJokeRetrievedListener {
+
+        @Override
+        public void onJokeRetrieved(String joke) {
+            Intent intent = new Intent(MainActivity.this, JokeActivity.class);
+            intent.putExtra(JokeActivity.JOKE_INTENT_KEY, joke);
+            startActivity(intent);
+        }
     }
 
 
